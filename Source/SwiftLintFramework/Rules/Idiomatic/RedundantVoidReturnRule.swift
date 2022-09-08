@@ -31,36 +31,36 @@ public struct RedundantVoidReturnRule: ConfigurationProviderRule, SwiftSyntaxCor
             """)
         ],
         triggeringExamples: [
-            Example("func foo() ↓-> Void {}\n"),
+            Example("func foo()↓ -> Void {}\n"),
             Example("""
             protocol Foo {
-              func foo() ↓-> Void
+              func foo()↓ -> Void
             }
             """),
-            Example("func foo() ↓-> () {}\n"),
-            Example("func foo() ↓-> ( ) {}"),
+            Example("func foo()↓ -> () {}\n"),
+            Example("func foo()↓ -> ( ) {}"),
             Example("""
             protocol Foo {
-              func foo() ↓-> ()
+              func foo()↓ -> ()
             }
             """),
             Example("""
-            doSomething { arg ↓-> () in
+            doSomething { arg↓ -> () in
                 print(arg)
             }
             """),
             Example("""
-            doSomething { arg ↓-> Void in
+            doSomething { arg↓ -> Void in
                 print(arg)
             }
             """)
         ],
         corrections: [
-            Example("func foo() ↓-> Void {}\n"): Example("func foo() {}\n"),
-            Example("protocol Foo {\n func foo() ↓-> Void\n}\n"): Example("protocol Foo {\n func foo()\n}\n"),
-            Example("func foo() ↓-> () {}\n"): Example("func foo() {}\n"),
-            Example("protocol Foo {\n func foo() ↓-> ()\n}\n"): Example("protocol Foo {\n func foo()\n}\n"),
-            Example("protocol Foo {\n    #if true\n    func foo() ↓-> Void\n    #endif\n}\n"):
+            Example("func foo()↓ -> Void {}\n"): Example("func foo() {}\n"),
+            Example("protocol Foo {\n func foo()↓ -> Void\n}\n"): Example("protocol Foo {\n func foo()\n}\n"),
+            Example("func foo()↓ -> () {}\n"): Example("func foo() {}\n"),
+            Example("protocol Foo {\n func foo()↓ -> ()\n}\n"): Example("protocol Foo {\n func foo()\n}\n"),
+            Example("protocol Foo {\n    #if true\n    func foo()↓ -> Void\n    #endif\n}\n"):
                 Example("protocol Foo {\n    #if true\n    func foo()\n    #endif\n}\n")
         ]
     )
@@ -77,7 +77,6 @@ public struct RedundantVoidReturnRule: ConfigurationProviderRule, SwiftSyntaxCor
             )
         }
     }
-
 }
 
 private extension RedundantVoidReturnRule {
@@ -85,8 +84,9 @@ private extension RedundantVoidReturnRule {
         private(set) var violationPositions: [AbsolutePosition] = []
 
         override func visitPost(_ node: ReturnClauseSyntax) {
-            if node.containsRedundantVoidViolation {
-                violationPositions.append(node.arrow.positionAfterSkippingLeadingTrivia)
+            if node.containsRedundantVoidViolation,
+                let tokenBeforeOutput = node.previousToken {
+                violationPositions.append(tokenBeforeOutput.endPositionBeforeTrailingTrivia)
             }
         }
     }
@@ -103,6 +103,7 @@ private extension RedundantVoidReturnRule {
 
         override func visit(_ node: FunctionSignatureSyntax) -> Syntax {
             guard let output = node.output,
+                  let tokenBeforeOutput = output.previousToken,
                   output.containsRedundantVoidViolation else {
                 return super.visit(node)
             }
@@ -115,8 +116,8 @@ private extension RedundantVoidReturnRule {
                 return super.visit(node)
             }
 
-            correctionPositions.append(output.arrow.positionAfterSkippingLeadingTrivia)
-            return super.visit(node.withOutput(nil))
+            correctionPositions.append(tokenBeforeOutput.endPositionBeforeTrailingTrivia)
+            return super.visit(node.withOutput(nil).removingTrailingSpaceIfNeeded())
         }
     }
 }
@@ -132,5 +133,31 @@ private extension ReturnClauseSyntax {
         }
 
         return false
+    }
+}
+
+private extension FunctionSignatureSyntax {
+    /// `withOutput(nil)` adds a `.spaces(1)` trailing trivia, but we don't always want it.
+    func removingTrailingSpaceIfNeeded() -> Self {
+        guard let trivia = trailingTrivia, let nextToken = nextToken else {
+            return self
+        }
+
+        let containsNewLine = nextToken.leadingTrivia.contains { piece in
+            switch piece {
+            case .newlines:
+                return true
+            default:
+                return false
+            }
+        }
+
+        guard containsNewLine else {
+            return self
+        }
+
+        return withTrailingTrivia(
+            Trivia(pieces: Array(trivia.dropFirst()))
+        )
     }
 }
