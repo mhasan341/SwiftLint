@@ -132,6 +132,7 @@
   - `multiline_arguments_brackets`
   - `multiline_parameters`
   - `multiple_closures_with_trailing_closure`
+  - `nimble_operator`
   - `no_extension_access_modifier`
   - `no_fallthrough_only`
   - `no_space_in_method_call`
