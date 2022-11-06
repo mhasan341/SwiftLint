@@ -3,7 +3,7 @@ load("@com_github_jpsim_sourcekitten//bazel:repos.bzl", "sourcekitten_repos")
 
 def _default_extra_swift_sources_impl(ctx):
     ctx.file("WORKSPACE", "")
-    ctx.file("empty.swift", "func extraRules() -> [Rule.Type] { [] }")
+    ctx.file("empty.swift", "public func extraRules() -> [Rule.Type] { [] }")
     ctx.file("BUILD.bazel", """
 filegroup(
     name = "extra_rules",

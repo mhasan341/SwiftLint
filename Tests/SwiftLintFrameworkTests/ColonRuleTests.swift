@@ -1,4 +1,5 @@
-@testable import SwiftLintFramework
+@testable import SwiftLintBuiltInRules
+import SwiftLintFramework
 
 class ColonRuleTests: SwiftLintTestCase {
     // swiftlint:disable:next function_body_length

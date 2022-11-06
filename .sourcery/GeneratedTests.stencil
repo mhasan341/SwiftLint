@@ -1,4 +1,4 @@
-@testable import SwiftLintFramework
+@testable import SwiftLintBuiltInRules
 import SwiftLintTestHelpers
 
 // swiftlint:disable file_length type_name

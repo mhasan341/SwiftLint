@@ -1,6 +1,6 @@
 import Foundation
 import SourceKittenFramework
-@testable import SwiftLintFramework
+@testable import SwiftLintCore
 import XCTest
 
 // swiftlint:disable type_body_length - Disable the rule and self-test commenting a command

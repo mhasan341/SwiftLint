@@ -1,4 +1,5 @@
-@testable import SwiftLintFramework
+@testable import SwiftLintBuiltInRules
+@testable import SwiftLintCore
 import XCTest
 
 final class ParserDiagnosticsTests: SwiftLintTestCase {

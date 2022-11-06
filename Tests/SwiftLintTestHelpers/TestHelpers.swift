@@ -1,6 +1,7 @@
 import Foundation
 import SourceKittenFramework
-@testable import SwiftLintFramework
+@testable import SwiftLintCore
+import SwiftLintFramework
 import XCTest
 
 // swiftlint:disable file_length
@@ -430,7 +431,7 @@ public extension XCTestCase {
                            parserDiagnosticsDisabledForTests: Bool = true) {
         let ruleDescription = ruleDescription.focused()
 
-        SwiftLintFramework.parserDiagnosticsDisabledForTests = parserDiagnosticsDisabledForTests
+        SwiftLintCore.parserDiagnosticsDisabledForTests = parserDiagnosticsDisabledForTests
 
         // corrections
         ruleDescription.corrections.forEach {
