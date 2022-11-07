@@ -167,15 +167,6 @@ private typealias PredicateDescription = (to: String, toNot: String?, arity: Ari
 private enum Arity {
     case nullary(analogueValue: ExprSyntaxProtocol)
     case withArguments
-
-    var hasArguments: Bool {
-        switch self {
-        case .nullary:
-            return false
-        case .withArguments:
-            return true
-        }
-    }
 }
 
 private struct Expectation {
