@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "IndexStore",
+        "repositoryURL": "https://github.com/lyft/swift-index-store",
+        "state": {
+          "branch": null,
+          "revision": "c8df3645ac28b9527cd5157a30f909d69a4b7e2d",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "SwiftSyntax",
         "repositoryURL": "https://github.com/apple/swift-syntax.git",
         "state": {
