@@ -158,9 +158,9 @@ extension ModifierListSyntax? {
 
 extension VariableDeclSyntax {
     var isIBOutlet: Bool {
-        attributes?.contains { attr in
-            attr.as(AttributeSyntax.self)?.attributeName.tokenKind == .identifier("IBOutlet")
-        } ?? false
+       attributes?.contains { attr in
+           attr.as(AttributeSyntax.self)?.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text == "IBOutlet"
+       } ?? false
     }
 
     var weakOrUnownedModifier: DeclModifierSyntax? {
@@ -202,7 +202,7 @@ public extension EnumDeclSyntax {
 extension FunctionDeclSyntax {
     var isIBAction: Bool {
         attributes?.contains { attr in
-            attr.as(AttributeSyntax.self)?.attributeName.tokenKind == .identifier("IBAction")
+            attr.as(AttributeSyntax.self)?.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text == "IBAction"
         } ?? false
     }
 
