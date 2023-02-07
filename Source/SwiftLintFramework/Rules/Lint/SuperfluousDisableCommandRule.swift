@@ -19,9 +19,9 @@ public struct SuperfluousDisableCommandRule: ConfigurationProviderRule, SourceKi
         return []
     }
 
-    func reason(for rule: Rule.Type) -> String {
+    func reason(forRuleIdentifier ruleIdentifier: String) -> String {
         """
-        SwiftLint rule '\(rule.description.identifier)' did not trigger a violation in the disabled region; \
+        SwiftLint rule '\(ruleIdentifier)' did not trigger a violation in the disabled region; \
         remove the disable command
         """
     }
