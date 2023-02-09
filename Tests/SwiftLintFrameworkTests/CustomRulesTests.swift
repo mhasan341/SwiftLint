@@ -176,7 +176,7 @@ class CustomRulesTests: XCTestCase {
     }
 
     func testSuperfluousDisableCommandWithCustomRules() {
-        let customRulesConfiguration: [String:Any] = [
+        let customRulesConfiguration: [String: Any] = [
             "custom1": [
                 "regex": "pattern",
                 "match_kinds": "comment"
@@ -198,7 +198,7 @@ class CustomRulesTests: XCTestCase {
     }
 
     func testSuperfluousDisableCommandWithMultipleCustomRules() {
-        let customRulesConfiguration: [String:Any] = [
+        let customRulesConfiguration: [String: Any] = [
             "custom1": [
                 "regex": "pattern",
                 "match_kinds": "comment"
